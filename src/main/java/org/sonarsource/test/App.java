@@ -38,6 +38,8 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 
 /**
  * Hello world!
@@ -61,6 +63,7 @@ public class App {
         .withMinute(Integer.parseInt(args[3]))
         .withSecond(0);
 
+    LogManager.getLogManager().getLogger("").setLevel(Level.ALL);
     executorService.schedule(
         () -> testHazelcast(ip, port),
         Duration.between(ZonedDateTime.now(), launchTime).toNanos(),
@@ -92,6 +95,7 @@ public class App {
     cfg.setProperty("hazelcast.phone.home.enabled", "false");
     cfg.setProperty("hazelcast.wait.seconds.before.join", "10"); */
     cfg.setProperty("hazelcast.socket.bind.any", "false");
+    cfg.setProperty("hazelcast.tcp.join.port.try.count", "20");
     cfg.getNetworkConfig().setOutboundPorts(Arrays.asList(0));
     cfg.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
     cfg.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
